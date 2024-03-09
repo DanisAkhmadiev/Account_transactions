@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-with open('operations.json', 'r') as file:
+with open('../operations.json', 'r') as file:
     data = json.load(file)
 
 
@@ -48,16 +48,18 @@ def mask_card_number(card):
 def get_card_name(card):
     """берет значение по ключу from и to и возвращает метод платежа"""
     card_name = ''.join(c for c in card if not c.isdigit())
-    if card_name[-1] == ' ':
-        card_name = card_name[:-1]
-    return card_name
+    return card_name.strip()
 
+
+def main(dict):
+    """выводит последних 5 выполненных операций и соединяет все функции воедино в заданном формате"""
+    for i in range(len(dict)):
+        print(dict[i]['date'], dict[i]['description'])
+        print(get_card_name(dict[i]['from']), mask_card_number(dict[i]['from']), '->', get_card_name(dict[i]['to']),
+              mask_card_number(dict[i]['to']))
+        print(dict[i]['operationAmount']['amount'], dict[i]['operationAmount']['currency']['name'], '\n')
 
 d1 = executed_operations(data)
 d1 = convert_date(d1)
 d1 = print_last_5_operations(d1)
-for i in range(len(d1)):
-    print(d1[i]['date'], d1[i]['description'])
-    print(get_card_name(d1[i]['from']), mask_card_number(d1[i]['from']), '->', get_card_name(d1[i]['to']),
-          mask_card_number(d1[i]['to']))
-    print(d1[i]['operationAmount']['amount'], d1[i]['operationAmount']['currency']['name'], '\n')
+main(d1)
