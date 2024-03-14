@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from pprint import pprint
 with open('../operations.json', 'r') as file:
     data = json.load(file)
 
@@ -63,3 +64,5 @@ d1 = executed_operations(data)
 d1 = convert_date(d1)
 d1 = print_last_5_operations(d1)
 main(d1)
+
+
