@@ -13,7 +13,7 @@ def executed_operations(operations):
             if operation["state"] == "EXECUTED":
                 executed_operations_list.append(operation)
     return executed_operations_list
-    pprint(data)
+
 
 def convert_date(operations):
     """берет дату операций и со str конвертирует в datetime"""
@@ -24,14 +24,14 @@ def convert_date(operations):
         operation["date"] = formatted_operation_time
         convert_operations.append(operation)
     return convert_operations
-    pprint(data)
+
 
 
 def print_last_5_operations(operations):
     """Сортируем операции по дате в обратном порядке, а потом возвращает последние 5 операций"""
     sorted_operations = sorted(operations, key=lambda x: x['date'], reverse=True)
     return sorted_operations[:5]
-    pprint(data)
+
 
 def mask_card_number(card):
     """берет значение по ключу from и оставляет только номер карты, потом маскирует номер """
@@ -45,29 +45,30 @@ def mask_card_number(card):
     else:
         masked_number = "**" + digits_only[2:6]
     return masked_number
-    pprint(data)
+
 
 def get_card_name(card):
     """берет значение по ключу from и to и возвращает метод платежа"""
     card_name = ''.join(c for c in card if not c.isdigit())
     return card_name.strip()
-    pprint(data)
+
 
 def main(dict):
     """выводит последних 5 выполненных операций и соединяет все функции воедино в заданном формате"""
     for i in range(len(dict)):
-        pprint(dict[i])
         print(dict[i]['date'], dict[i]['description'])
-        print(get_card_name(dict[i]['from']), mask_card_number(dict[i]['from']), '->', get_card_name(dict[i]['to']),
-              mask_card_number(dict[i]['to']))
+        if 'from' in get_card_name(dict[i]):
+            print(get_card_name(dict[i]['from']), mask_card_number(dict[i]['from']), '->', get_card_name(dict[i]['to']), mask_card_number(dict[i]['to']))
+        else:
+            print('->', get_card_name(dict[i]['to']), mask_card_number(dict[i]['to']))
         print(dict[i]['operationAmount']['amount'], dict[i]['operationAmount']['currency']['name'], '\n')
 
-d1 = executed_operations(data)
-pprint(print_last_5_operations(d1))
-
 # d1 = executed_operations(data)
-# d1 = print_last_5_operations(d1)
-# d1 = convert_date(d1)
-# main(d1)
-#
-#
+# pprint(print_last_5_operations(d1))
+
+d1 = executed_operations(data)
+d1 = print_last_5_operations(d1)
+d1 = convert_date(d1)
+main(d1)
+
+
